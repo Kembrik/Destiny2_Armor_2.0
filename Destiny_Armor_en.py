@@ -10,6 +10,10 @@ def SearchArmor(line, selectClassAndArmors):  # поиск совпадения 
         return 1
     return 0
 
+def ChekTag(armor): # Проверка тега
+    if armor[3] == "infuse":
+        return 0
+    return 1
 
 def LineToList(line):  # преобразуем строку в список
     armor = line.rstrip("\n")
@@ -113,7 +117,9 @@ def ReadFile(
     with open(r"E:\python\PRO\Destiny_2\destinyArmor_en.csv", "r") as file:
         AddArmorArray(file.readline().rstrip("\n").split(","), arrayAllArmors)
         for line in file:
-            if line.find("Legendary") > -1:
+            # if line.find("Legendary") > -1:
+            # aaa = line.find("infuse")
+            if line.find("Legendary") > -1 and line.find("infuse") == -1:
                 armor = LineToList(line)
                 if SearchArmor(armor, selectClassAndArmors):
                     if CheckType(armor, arrayAllStats):
@@ -123,19 +129,19 @@ def ReadFile(
 
 
 def WriteFile(arrayAllArmors):  # перезапись файла брони
-    with open(r"E:\python\PRO\Destiny_2\destinyArmor_en.csv", "w") as file:
+    with open(r"E:\python\PRO\Destiny_2\destinyArmor_ru.csv", "w", encoding='utf-8') as file:
         for armor in arrayAllArmors:
             armor = ",".join(armor)
             file.write(armor + "\n")
 
 
 def SelectBox():  # выбор чего оптимизируем
-    listClassArmors = ["Warlock", "Titan", "Hunter"]
+    listClassArmors = ["Варлок", "Титан", "Охотник"]
     listTypeArmors = [
-        "Helmet",
-        "Gauntlets",
-        "Chest Armor",
-        "Leg Armor",
+        "Шлем",
+        "Рукавицы",
+        "Нагрудник",
+        "Броня для ног",
     ]
     selectClassArmors, selectTypeArmors = [], []
 
@@ -166,17 +172,17 @@ def SelectBox():  # выбор чего оптимизируем
 
 
 def SelectStatsArmors():  # выбор нужных статов
-    listClassArmors = ["Warlock", "Titan", "Hunter"]
+    listClassArmors = ["Варлок", "Титан", "Охотник"]
     listTypeArmors = [
-        "Helmet",
-        "Gauntlets",
-        "Chest Armor",
-        "Leg Armor",
+        "Шлем",
+        "Рукавицы",
+        "Нагрудник",
+        "Броня для ног",
     ]
     listElementArmors = [
-        "Void Energy Capacity",
-        "Solar Energy Capacity",
-        "Arc Energy Capacity",
+        "Энергетическая емкость (Пустота)",
+        "Энергетическая емкость (Солнце)",
+        "Энергетическая емкость (Молния)",
     ]
     listTypeActivity = ["PVP", "PVE"]
 
@@ -189,7 +195,7 @@ def SelectStatsArmors():  # выбор нужных статов
                 arrayAllStats[classArmor][typeArmor][ElementArmor] = {
                     key: [] for key in listTypeActivity
                 }
-                if classArmor == "Warlock":
+                if classArmor == "Варлок":
                     arrayAllStats[classArmor][typeArmor][ElementArmor]["PVP"] = (
                         [27, "Resilience", 0, 0],
                         [28, "Recovery", 0, 0],
@@ -200,7 +206,7 @@ def SelectStatsArmors():  # выбор нужных статов
                         [29, "Discipline", 0, 0],
                         [28, 29, "Sum", 0, 0],
                     )  # [номерСтата, значениеСтата, номер Предмета]
-                if classArmor == "Titan":
+                if classArmor == "Титан":
                     arrayAllStats[classArmor][typeArmor][ElementArmor]["PVP"] = (
                         [27, "Resilience", 0, 0],
                         [28, "Recovery", 0, 0],
@@ -211,7 +217,7 @@ def SelectStatsArmors():  # выбор нужных статов
                         [31, "Strength", 0, 0],
                         [28, 31, "Sum", 0, 0],
                     )  # [номерСтата, значениеСтата, номер Предмета]
-                if classArmor == "Hunter":
+                if classArmor == "Охотник":
                     arrayAllStats[classArmor][typeArmor][ElementArmor]["PVP"] = (
                         [27, "Resilience", 0, 0],
                         [28, "Recovery", 0, 0],
@@ -222,15 +228,6 @@ def SelectStatsArmors():  # выбор нужных статов
                         [29, "Discipline", 0, 0],
                         [28, 29, "Sum", 0, 0],
                     )  # [номерСтата, значениеСтата, номер Предмета]
-
-    # arrayAllStats["Warlock"]["PVP"] = {stats:[21, 20], maxOne:0, maxTwe:0, maxSum:0}  # ["Resilience", "Recovery"]
-    # arrayAllStats["Warlock"]["PVE"] = {stats:[21, 23], maxOne:0, maxTwe: 0, maxSum: 0}  # ["Resilience", "Discipline"]
-
-    # arrayAllStats["Titan"]["PVP"] = [21, 20]  # ["Resilience", "Recovery"]
-    # arrayAllStats["Titan"]["PVE"] = [21, 24]  # ["Resilience", "Strength"]
-
-    # arrayAllStats["Hunter"]["PVP"] = [21, 20]  # ["Resilience", "Recovery"]
-    # arrayAllStats["Hunter"]["PVE"] = [21, 23]  # ["Resilience", "Discipline"]
 
     return arrayAllStats
 
